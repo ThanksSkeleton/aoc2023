@@ -69,7 +69,7 @@ For each river,
 		For each alligator,
 			If it can take a bite out of the log:
 				Take the eaten piece, change its color, and pass it to the next river
-				Take all the leftovers and for the pile of logs for THIS river. 
+				Take all the leftovers for the pile of logs for THIS river. 
 	For all the logs that no alligators want to eat, pass it to the next river
 After the final river, take the greenest log.
 ```
