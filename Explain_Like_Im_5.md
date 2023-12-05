@@ -56,10 +56,10 @@ Wow, that's kinda complicated. But we can do it. Its not that bad.
 Here are some things that we know that can make this problem easier:
 
 * A log can get bitten by multiple alligators, but no alligators can fight over the same PART of the log
-** Because of that, it doesn't matter in what order you offer the logs to them
+* Because of that, it doesn't matter in what order you offer the logs to them
 * There's not THAT many alligators
-** They make at most 2 additional pieces per bite. 
-** They won't make sawdust because they can't bite THAT much!
+* They make at most 2 additional pieces per bite. 
+* They won't make sawdust because they can't bite THAT much!
 
 We can figure out what happens and make sure we track all the logs and the pieces.
 
