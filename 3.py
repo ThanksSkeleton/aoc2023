@@ -36,6 +36,9 @@ def work_2(lines: list[str]) -> str:
     return str(sum)
 
 def find_all_labels(map: dict[Tuple[int, int], str], x: int, y: int) -> list[int]:
+    # M1.2 M1.1 M1.3
+    # S1 () S2
+    # M2.2 M2.1 M2.3
     side_points = [(x-1, y), (x+1, y)]
     middle_points_set = [((x, y-1), (x-1, y-1), (x+1, y-1)), ((x,y+1), (x-1, y+1), (x+1, y+1))]
     to_return = []
