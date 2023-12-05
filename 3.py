@@ -2,6 +2,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 from typing import Tuple
+from typing import Optional
 
 def lines(full_file_path: str) -> list[str]:
     p = Path(full_file_path)
@@ -41,7 +42,7 @@ def find_all_labels(map: dict[Tuple[int, int], str], x: int, y: int) -> list[int
     # M2.2 M2.1 M2.3
     side_points = [(x-1, y), (x+1, y)]
     middle_points_set = [((x, y-1), (x-1, y-1), (x+1, y-1)), ((x,y+1), (x-1, y+1), (x+1, y+1))]
-    to_return = []
+    to_return: list[Optional[int]] = []
     for side in side_points:
         to_return.append(find_value_total(map, side[0], side[1]))
     for middle in middle_points_set:
@@ -51,10 +52,10 @@ def find_all_labels(map: dict[Tuple[int, int], str], x: int, y: int) -> list[int
             to_return.append(find_value_total(map, middle[2][0], middle[2][1]))
         else:
             to_return.append(middle_value)
-    to_return = [t for t in to_return if t is not None]
-    return to_return
+    to_return_real: list[int] = [t for t in to_return if t is not None]
+    return to_return_real
 
-def find_value_total(map: dict[(int, int), str], x: int, y:int) -> int:
+def find_value_total(map: dict[Tuple[int, int], str], x: int, y:int) -> Optional[int]:
     raw = find_value_raw(map, x, y)
     if len(raw) == 0:
         return None
@@ -64,16 +65,16 @@ def find_value_total(map: dict[(int, int), str], x: int, y:int) -> int:
         sum = sum + int(rawvalue) * pow(10, i)
     return sum 
 
-def find_value_raw(map: dict[(int, int), str], x: int, y:int) -> list[int]:
+def find_value_raw(map: dict[Tuple[int, int], str], x: int, y:int) -> list[int]:
     if (x, y) not in map:
         return []
     value = map[(x, y)]
     if not value.isnumeric():
         return []
     else:
-        return find_value_raw_direction(map, x-1, y, -1) + [value] + find_value_raw_direction(map, x+1, y, 1)
+        return find_value_raw_direction(map, x-1, y, -1) + [int(value)] + find_value_raw_direction(map, x+1, y, 1)
 
-def find_value_raw_direction(map: dict[(int, int), str], x: int, y:int, direction: int) -> list[int]:
+def find_value_raw_direction(map: dict[Tuple[int, int], str], x: int, y:int, direction: int) -> list[int]:
     if (x, y) not in map:
         return []
     value = map[(x, y)]
@@ -82,9 +83,9 @@ def find_value_raw_direction(map: dict[(int, int), str], x: int, y:int, directio
     else:
         direction_result = find_value_raw_direction(map, x+direction, y, direction)
         if direction == -1:
-            direction_result.append(value)
+            direction_result.append(int(value))
         else:
-            direction_result.insert(0, value)
+            direction_result.insert(0, int(value))
         return direction_result
     
 #path = os.path.join("data_files", "3_1_example.txt")

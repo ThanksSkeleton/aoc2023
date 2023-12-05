@@ -15,7 +15,7 @@ def work(lines: list[str]) -> str:
         max_i = i+1
         s = score_part_2(line)
         base_count_map[max_i] =s
-    recursive_count_map = {}
+    recursive_count_map: dict[int, int] = {}
     count_down = list(range(1, max_i+1))
     count_down.reverse()
     for i in count_down:
