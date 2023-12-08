@@ -1,9 +1,10 @@
 from __future__ import annotations
-from typing import Tuple
+from typing import Dict, Tuple
 from typing import List
 from pathlib import Path
 from typing import Optional
 import math
+import functools
 import os
 
 class CardHand:
@@ -15,6 +16,12 @@ class CardHand:
 
     def to_digits(self, hand: str) -> List[int]:
         return [self.to_digit(x) for x in hand] 
+
+    def __str__(self):
+        return f"CardHand: {self.hand}, {self.digits}, {self.bid}"
+
+    def __repr__(self):
+        return f"CardHand: {self.hand}, {self.digits}, {self.bid}"
 
     def to_digit(self, card: str) -> int:
         if card.isnumeric():
@@ -31,15 +38,15 @@ class CardHand:
         else:
             return 14
     
-    def determine_hand(hand_numerals: List[int]) -> int:
-        card_count_dict = {}
+    def determine_hand(self, hand_numerals: List[int]) -> int:
+        card_count_dict: Dict[int, int] = {}
         for n in hand_numerals:
             if n in card_count_dict.keys():
                 previous_count = card_count_dict[n]
                 card_count_dict[n] = previous_count + 1
             else:
                 card_count_dict[n] = 1
-        matches = sorted(card_count_dict.values, reverse=True)
+        matches = sorted(card_count_dict.values(), reverse=True)
         # RANK DESCRIPTION
         # 7 Five of a kind, where all five cards have the same label: AAAAA
         # 6 Four of a kind, where four cards have the same label and one card has a different label: AA8AA
@@ -65,20 +72,33 @@ class CardHand:
         else:
             return 1
 
-    def __lt__(a: CardHand, b: CardHand) -> int:
-        if a.hand != b.hand:
-            return a.hand < b.hand
-        else:
-            for i in range(5):
-                if a.digits[i] < b.digits[i]
-
-        
+def custom_comparison(a: CardHand, b: CardHand) -> int:
+    comp_simple = (a.hand > b.hand) - (a.hand < b.hand)
+    if comp_simple != 0:
+        return comp_simple
+    else:
+        for i in range(5):
+            comp = (a.digits[i] > b.digits[i]) - (a.digits[i] < b.digits[i])
+            if comp == 0:
+                pass
+            else:
+                return comp
+        return 0
 
 def lines(full_file_path: str) -> List[str]:
     p = Path(full_file_path)
     t = p.read_text()
     return t.splitlines()
 
-
-
 def work(lines: List[str]) -> str:
+    hands_unsorted = [ CardHand(line) for line in lines]
+    hands_sorted = sorted(hands_unsorted, key=functools.cmp_to_key(custom_comparison))
+    print(hands_sorted)
+    sum = 0
+    for i, hand in enumerate(hands_sorted):
+        sum = sum + (i+1) * hand.bid
+    return str(sum)
+
+#path = os.path.join("data_files", "7_1_example.txt")
+path = os.path.join("data_files", "7_1.txt")
+print(work(lines(path)))
