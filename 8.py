@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Optional
 from typing import List
 from pathlib import Path
 import functools
@@ -28,6 +28,19 @@ def parse_line(input: str) -> Label_And_Node:
     splitted_1 = clean_2.split("=")
     splitted_2 = splitted_1[1].split(",")
     return (splitted_1[0].strip(), (splitted_2[0].strip(), splitted_2[1].strip()))
+
+MegacycleNode = Tuple[str, str]
+LinearNode = Tuple[str, int]
+LinearNodeZero = Tuple[str, int, Optional[int]]
+
+# This can be expressed as
+# n Full Cycles + 1 subcycle of size k
+# k such that some number of starting nodes all align to a zero
+
+
+def build_maps(map: Dict[str, Node], instructions: str) -> Tuple[Dict[str, MegacycleNode], Dict[str, LinearNodeZero]]:
+    for char in instructions:
+
 
 
 def navigate_all(map: Dict[str, Node], instructions: str) -> int:
